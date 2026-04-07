@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vision Board — Philosophy of Teaching & Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #4a7a6d;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 20px 50px;
+  font-family: 'Lato', sans-serif;
+}
+
+/* ── MAIN BOARD ── */
+.board {
+  width: 1380px;
+  min-height: 900px;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.35);
+}
+
+/* Scrapbook background using layered CSS */
+.board-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #7ab5a4;
+  background-image:
+    /* diagonal lined paper texture */
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 28px,
+      rgba(255,255,255,0.04) 28px,
+      rgba(255,255,255,0.04) 29px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 28px,
+      rgba(255,255,255,0.03) 28px,
+      rgba(255,255,255,0.03) 29px
+    ),
+    /* soft vignette */
+    radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.12) 100%);
+  z-index: 0;
+}
+
+/* Paper grain SVG noise overlay */
+.board-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Torn paper book-page texture strips */
+.strip-left {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 90px;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.06) 0px,
+    rgba(255,255,255,0.06) 1px,
+    transparent 1px,
+    transparent 18px
+  );
+  z-index: 1;
+}
+.strip-right {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 90px;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.06) 0px,
+    rgba(255,255,255,0.06) 1px,
+    transparent 1px,
+    transparent 18px
+  );
+  z-index: 1;
+}
+
+/* Scattered dot pattern */
+.board-dots {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Floral corner decorations */
+.corner-flower {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  z-index: 2;
+  opacity: 0.18;
+}
+.cf-tl { top: 0; left: 0; }
+.cf-tr { top: 0; right: 0; transform: scaleX(-1); }
+.cf-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.cf-br { bottom: 0; right: 0; transform: scale(-1,-1); }
+
+/* ── CONTENT WRAPPER ── */
+.content {
+  position: relative;
+  z-index: 5;
+  padding: 32px 44px 40px;
+}
+
+/* ── TITLE ── */
+.title-area {
+  text-align: center;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.board-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 82px;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 2px 4px 12px rgba(0,0,0,0.25), 0 0 40px rgba(0,0,0,0.1);
+  letter-spacing: 2px;
+}
+
+.board-subtitle {
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  font-weight: 300;
+  margin-top: 4px;
+}
+
+.title-rule {
+  width: 200px;
+  margin: 10px auto 0;
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.4);
+}
+
+/* ── MAIN 3-COL GRID ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 275px 1fr 275px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* ── COLUMN STACKS ── */
+.col { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── POLAROID CARD ── */
+.card {
+  background: #fdf8f0;
+  border-radius: 3px;
+  box-shadow: 3px 5px 16px rgba(0,0,0,0.22), 1px 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+.card:nth-child(1) { transform: rotate(-1.2deg); }
+.card:nth-child(2) { transform: rotate(0.9deg); }
+.card:nth-child(3) { transform: rotate(-0.6deg); }
+
+/* Tape strip on each card */
+.tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52px;
+  height: 20px;
+  border-radius: 2px;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.tape-blue  { background: rgba(168,196,212,0.65); }
+.tape-peach { background: rgba(220,180,150,0.65); }
+.tape-green { background: rgba(143,184,122,0.65); }
+.tape-lilac { background: rgba(190,168,212,0.65); }
+.tape-yellow{ background: rgba(220,210,140,0.65); }
+.tape-rose  { background: rgba(212,168,168,0.65); }
+
+/* Card photo area */
+.card-photo {
+  width: 100%;
+  height: 135px;
+  overflow: hidden;
+  position: relative;
+}
+.card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+
+/* Black overlay caption on photo */
+.photo-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.72);
+  color: #fff;
+  font-size: 7.5px;
+  letter-spacing: 0.3px;
+  padding: 5px 8px;
+  line-height: 1.4;
+  font-weight: 300;
+}
+.photo-caption strong {
+  display: block;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+  color: #d4eac4;
+}
+
+/* Card text body */
+.card-body {
+  padding: 11px 13px 13px;
+}
+.card-heading {
+  font-family: 'Dancing Script', cursive;
+  font-size: 24px;
+  color: #2d5a40;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.card-tag {
+  display: inline-block;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #fff;
+  background: #5f9a7a;
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+.card-text {
+  font-size: 9px;
+  color: #3d3530;
+  line-height: 1.6;
+}
+.in-practice {
+  margin-top: 7px;
+  padding: 6px 8px;
+  border-left: 2px solid #8fb87a;
+  background: rgba(143,184,122,0.12);
+  border-radius: 0 3px 3px 0;
+}
+.in-practice-label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #3a6040;
+  margin-bottom: 2px;
+}
+.in-practice-text { font-size: 8.5px; color: #4a3f32; line-height: 1.5; }
+
+/* ── CENTER PHILOSOPHY ── */
+.center-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.philosophy-box {
+  background: linear-gradient(150deg, #d6ead6 0%, #c5dfc5 50%, #b8d4b8 100%);
+  border-radius: 6px;
+  padding: 28px 26px 24px;
+  box-shadow: 4px 6px 22px rgba(0,0,0,0.18);
+  border: 1px solid rgba(95,154,122,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.philosophy-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg, transparent, transparent 40px,
+    rgba(255,255,255,0.06) 40px, rgba(255,255,255,0.06) 41px
+  );
+}
+.philosophy-box::after {
+  content: '"';
+  position: absolute;
+  top: 0; left: 10px;
+  font-size: 120px;
+  font-family: 'Playfair Display', serif;
+  color: rgba(45,90,64,0.1);
+  line-height: 1;
+}
+.phil-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e4030;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(45,90,64,0.2);
+  position: relative;
+  z-index: 1;
+}
+.phil-text {
+  font-size: 10.5px;
+  color: #2a3828;
+  line-height: 1.85;
+  text-align: justify;
+  position: relative;
+  z-index: 1;
+}
+.phil-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+  position: relative;
+  z-index: 1;
+}
+.phil-dots span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #2d5a40;
+  opacity: 0.35;
+}
+
+/* Connecting arrows SVG (sits between columns) */
+.arrows-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* ── CLOSING THOUGHT ── */
+.closing-row {
+  margin-top: 16px;
+}
+.closing-box {
+  background: rgba(253,248,240,0.92);
+  border-radius: 5px;
+  padding: 16px 32px;
+  text-align: center;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.14);
+  border-top: 3px solid #5f9a7a;
+  position: relative;
+}
+.closing-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d5a40;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.closing-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: #3a3028;
+  line-height: 1.65;
+}
+.closing-refs {
+  margin-top: 8px;
+  font-size: 8px;
+  color: #8a7a68;
+  letter-spacing: 0.3px;
+}
+
+/* Leaf/flower SVG decorations */
+.deco-leaf {
+  position: absolute;
+  opacity: 0.15;
+  z-index: 2;
+}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <!-- Background layers -->
+  <div class="board-bg"></div>
+  <div class="board-grain"></div>
+  <div class="board-dots"></div>
+  <div class="strip-left"></div>
+  <div class="strip-right"></div>
+
+  <!-- Corner floral SVGs -->
+  <svg class="corner-flower cf-tl" viewBox="0 0 110 110">
+    <circle cx="20" cy="20" r="18" fill="#fff"/>
+    <circle cx="50" cy="10" r="12" fill="#fff"/>
+    <circle cx="10" cy="50" r="12" fill="#fff"/>
+    <circle cx="35" cy="35" r="22" fill="#fff"/>
+    <ellipse cx="15" cy="60" rx="10" ry="22" fill="#fff" transform="rotate(-30 15 60)"/>
+    <ellipse cx="60" cy="15" rx="10" ry="22" fill="#fff" transform="rotate(60 60 15)"/>
+  </svg>
+  <svg class="corner-flower cf-tr" viewBox="0 0 110 110">
+    <circle cx="20" cy="20" r="18" fill="#fff"/>
+    <circle cx="50" cy="10" r="12" fill="#fff"/>
+    <circle cx="10" cy="50" r="12" fill="#fff"/>
+    <circle cx="35" cy="35" r="22" fill="#fff"/>
+    <ellipse cx="15" cy="60" rx="10" ry="22" fill="#fff" transform="rotate(-30 15 60)"/>
+    <ellipse cx="60" cy="15" rx="10" ry="22" fill="#fff" transform="rotate(60 60 15)"/>
+  </svg>
+  <svg class="corner-flower cf-bl" viewBox="0 0 110 110">
+    <circle cx="20" cy="20" r="18" fill="#fff"/>
+    <circle cx="50" cy="10" r="12" fill="#fff"/>
+    <circle cx="10" cy="50" r="12" fill="#fff"/>
+    <circle cx="35" cy="35" r="22" fill="#fff"/>
+    <ellipse cx="15" cy="60" rx="10" ry="22" fill="#fff" transform="rotate(-30 15 60)"/>
+    <ellipse cx="60" cy="15" rx="10" ry="22" fill="#fff" transform="rotate(60 60 15)"/>
+  </svg>
+  <svg class="corner-flower cf-br" viewBox="0 0 110 110">
+    <circle cx="20" cy="20" r="18" fill="#fff"/>
+    <circle cx="50" cy="10" r="12" fill="#fff"/>
+    <circle cx="10" cy="50" r="12" fill="#fff"/>
+    <circle cx="35" cy="35" r="22" fill="#fff"/>
+    <ellipse cx="15" cy="60" rx="10" ry="22" fill="#fff" transform="rotate(-30 15 60)"/>
+    <ellipse cx="60" cy="15" rx="10" ry="22" fill="#fff" transform="rotate(60 60 15)"/>
+  </svg>
+
+  <!-- ── CONTENT ── -->
+  <div class="content">
+
+    <!-- TITLE -->
+    <div class="title-area">
+      <div class="board-title">Vision Board</div>
+      <div class="board-subtitle">Philosophy of Teaching &amp; Learning</div>
+      <hr class="title-rule">
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="main-grid" style="position:relative;">
+
+      <!-- SVG DOTTED ARROWS -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;overflow:visible;" viewBox="0 0 1290 780" preserveAspectRatio="none">
+        <defs>
+          <marker id="arr" markerWidth="7" markerHeight="5" refX="5" refY="2.5" orient="auto">
+            <polygon points="0 0, 7 2.5, 0 5" fill="rgba(255,255,255,0.55)"/>
+          </marker>
+        </defs>
+        <!-- left col → center -->
+        <path d="M 275 160 C 360 160, 380 200, 430 220" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+        <path d="M 275 390 C 355 390, 380 340, 430 320" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+        <path d="M 275 610 C 350 610, 370 480, 430 440" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+        <!-- right col → center -->
+        <path d="M 1015 160 C 930 160, 910 200, 860 220" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+        <path d="M 1015 390 C 935 390, 910 340, 860 320" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+        <path d="M 1015 610 C 940 610, 920 480, 860 440" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+      </svg>
+
+      <!-- ── LEFT COLUMN ── -->
+      <div class="col">
+
+        <!-- Card 1: The Child -->
+        <div class="card">
+          <div class="tape tape-blue"></div>
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=400&h=160&q=80" alt="Child doing art" loading="lazy">
+            <div class="photo-caption">
+              <strong>Image: Artist</strong>
+              I believe the child is like a seedling — capable, curious, and full of creative potential. Each child constructs knowledge through exploration and meaningful interaction.
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-heading">The Child</div>
+            <span class="card-tag">Capable Learner</span>
+            <p class="card-text">Children are full of potential and curiosity, growing at their own pace when supported with care and guidance. The Reggio Emilia approach views children as capable learners who construct knowledge through exploration and interaction.</p>
+            <div class="in-practice">
+              <div class="in-practice-label">In My Practice</div>
+              <p class="in-practice-text">I observe children's interests, provide open-ended materials, and encourage them to explore and express their ideas freely.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: The Family -->
+        <div class="card">
+          <div class="tape tape-peach"></div>
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=400&h=135&q=80" alt="Family" loading="lazy">
+            <div class="photo-caption">
+              <strong>Image: Sketchbook</strong>
+              I believe families are the roots of a plant — providing strength, identity, and the foundation children need to thrive and belong.
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-heading">The Family</div>
+            <span class="card-tag">Roots of Strength</span>
+            <p class="card-text">Strong relationships between families and educators create a sense of security and belonging for children. Collaboration with families supports children's development and learning.</p>
+            <div class="in-practice">
+              <div class="in-practice-label">In My Practice</div>
+              <p class="in-practice-text">I build respectful relationships with families, communicate regularly, and include their values and cultures in the learning environment.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: The Educator -->
+        <div class="card">
+          <div class="tape tape-green"></div>
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=400&h=135&q=80" alt="Educator with child" loading="lazy">
+            <div class="photo-caption">
+              <strong>Image: Guide</strong>
+              A guide supports children without controlling. Educators observe, listen, and respond intentionally — shaped through reflection and dialogue.
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-heading">The Educator</div>
+            <span class="card-tag">Guide &amp; Nurturer</span>
+            <p class="card-text">Educators are like gardeners who nurture and guide children's growth. Educators support learning by observing, listening, and responding to children's needs.</p>
+            <div class="in-practice">
+              <div class="in-practice-label">In My Practice</div>
+              <p class="in-practice-text">I guide children through encouragement, provide support when needed, and create opportunities that promote independence and confidence.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end left col -->
+
+      <!-- ── CENTER COLUMN ── -->
+      <div class="center-col">
+
+        <div class="philosophy-box">
+          <div class="phil-title">My Teaching Philosophy</div>
+          <p class="phil-text">
+            I believe teaching and learning is like growing a garden. Just as plants grow over time with care, patience, and the right conditions, children develop through experiences, relationships, and guidance. Growth does not happen instantly but through observation, exploration, and continuous support.
+          </p>
+          <br>
+          <p class="phil-text">
+            This belief aligns with the Reggio Emilia approach, which views children as capable, curious, and active learners. Learning is seen as a process that develops through relationships, creativity, and meaningful interactions. As an educator, I support children by creating opportunities for exploration, encouraging their ideas, and guiding their development in a supportive environment.
+          </p>
+          <div class="phil-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <!-- Closing Thought inside center col -->
+        <div class="closing-box">
+          <div class="closing-title">✦ &nbsp;Closing Thought&nbsp; ✦</div>
+          <p class="closing-text">"Learning is not about reaching a perfect outcome. It is about the growth, exploration, and meaningful experiences that happen along the way."</p>
+          <p class="closing-refs">Brown, Benson McMullen &amp; File (2019) &nbsp;·&nbsp; How Does Learning Happen? Ontario's Pedagogy for the Early Years (2014) &nbsp;·&nbsp; Delgado (2020)</p>
+        </div>
+
+      </div><!-- end center col -->
+
+      <!-- ── RIGHT COLUMN ── -->
+      <div class="col">
+
+        <!-- Card 4: The Community -->
+        <div class="card">
+          <div class="tape tape-lilac"></div>
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=400&h=135&q=80" alt="Community collaboration" loading="lazy">
+            <div class="photo-caption">
+              <strong>Image: Collaboration</strong>
+              I believe the community is the ecosystem that supports growth. The Reggio Emilia approach values dialogue, connection, and shared thinking across communities.
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-heading">The Community</div>
+            <span class="card-tag">Ecosystem of Growth</span>
+            <p class="card-text">Community connections provide children with a sense of belonging and diverse experiences. Learning is strengthened when children are connected to their environment and community.</p>
+            <div class="in-practice">
+              <div class="in-practice-label">In My Practice</div>
+              <p class="in-practice-text">I include community experiences, cultural awareness, and group activities that help children understand the world around them.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: The Environment -->
+        <div class="card">
+          <div class="tape tape-yellow"></div>
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1568792923760-d70635a89fdc?auto=format&fit=crop&w=400&h=135&q=80" alt="Classroom environment" loading="lazy">
+            <div class="photo-caption">
+              <strong>Image: Studio</strong>
+              I believe the environment is the third teacher. Thoughtfully designed spaces influence how children engage, learn, and explore the world around them.
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-heading">The Environment</div>
+            <span class="card-tag">The Third Teacher</span>
+            <p class="card-text">A well-designed environment supports creativity, exploration, and engagement. The environment plays a key role in influencing children's learning and inspiring curiosity.</p>
+            <div class="in-practice">
+              <div class="in-practice-label">In My Practice</div>
+              <p class="in-practice-text">I create safe, inclusive, and engaging spaces with materials that encourage curiosity, collaboration, and independent learning.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Curriculum Model -->
+        <div class="card">
+          <div class="tape tape-rose"></div>
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=400&h=135&q=80" alt="Reggio Emilia books" loading="lazy">
+            <div class="photo-caption">
+              <strong>Image: Reggio Emilia</strong>
+              The Reggio Emilia approach views children as strong and capable. Learning is a process built through play, relationships, documentation, and ongoing inquiry.
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-heading">Curriculum Model</div>
+            <span class="card-tag" style="background:#c07a3a;">Reggio Emilia Approach</span>
+            <p class="card-text">I believe the Reggio Emilia approach reflects my philosophy of teaching and learning. This approach sees children as strong, capable, and full of potential, emphasizing learning through play, relationships, and inquiry.</p>
+            <div class="in-practice">
+              <div class="in-practice-label">In My Practice</div>
+              <p class="in-practice-text">I follow children's interests, encourage creativity, and support learning through exploration, collaboration, and reflection.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end right col -->
+
+    </div><!-- end main-grid -->
+
+  </div><!-- end content -->
+
+</div><!-- end board -->
+</body>
+</html>
