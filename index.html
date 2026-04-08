@@ -794,6 +794,62 @@
     .hero h1 { font-size: 2rem; }
     .vision-board { grid-template-columns: 1fr; }
   }
+
+  /* ===================== MOBILE — INLINE GRIDS ===================== */
+  @media (max-width: 860px) {
+    /* All two-column inline grids → single column */
+    div[style*="grid-template-columns:1fr 1fr"],
+    div[style*="grid-template-columns: 1fr 1fr"] {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 24px !important;
+    }
+
+    /* Hero sections on plans */
+    section[style*="height:420px"] {
+      height: 280px !important;
+    }
+    section[style*="height:420px"] h1,
+    section[style*="height:420px"] h2 {
+      font-size: 1.6rem !important;
+    }
+    section[style*="height:420px"] div[style*="padding:0 80px"] {
+      padding: 0 24px !important;
+    }
+    section[style*="height:420px"] div[style*="align-items:flex-end"] {
+      align-items: flex-start !important;
+      padding: 0 24px !important;
+    }
+    section[style*="height:420px"] p,
+    section[style*="height:420px"] h2 {
+      text-align: left !important;
+    }
+
+    /* Section inner padding */
+    .section-inner { padding: 0 20px !important; }
+
+    /* Artifact grid */
+    div[style*="grid-template-columns:1fr 1fr"][style*="margin-bottom:64px"] {
+      flex-direction: column !important;
+    }
+
+    /* Iframes — make them shorter on mobile */
+    iframe[style*="height:520px"] {
+      height: 380px !important;
+    }
+
+    /* Plan content sections */
+    section[style*="padding:64px 0"] {
+      padding: 40px 0 !important;
+    }
+
+    /* Quote banners */
+    .quote-banner blockquote { font-size: 1rem !important; }
+
+    /* Subpage nav buttons */
+    .subpage-nav { overflow-x: auto; }
+    .sp-btn { font-size: 0.65rem !important; padding: 12px 14px !important; }
+  }
 </style>
 </head>
 <body>
